@@ -1,15 +1,16 @@
 # app/main.py
 
+import os
 from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi.responses import JSONResponse
 from PIL import Image
 import torch
 from torchvision import transforms as T
 from src.train import load_model, loss_fn  # Load the model and loss function from src/train.py
 import io
-
-from fastapi.responses import JSONResponse
-import base64
 from io import BytesIO
+
+import base64
 import matplotlib.pyplot as plt
 
 app = FastAPI()
@@ -19,6 +20,9 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Load the model once
 MODEL_PATH = "./models/autoencoder_mnist.pth"
+if not os.path.exists(MODEL_PATH):
+    raise RuntimeError(f"Model file not found at {MODEL_PATH}. Please train it first.")
+
 model = load_model(MODEL_PATH)
 model.eval()
 
@@ -33,7 +37,7 @@ transform = T.Compose([
 def health():
     return {"status": "ok"}
 
-@app.post("/predict")
+@app.post("/predict", summary="Predict anomaly score from image")
 async def predict(file: UploadFile):
     try:
         contents = await file.read()
@@ -81,4 +85,5 @@ async def predict(file: UploadFile):
         })
 
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid image: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+

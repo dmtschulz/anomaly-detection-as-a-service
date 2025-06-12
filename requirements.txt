@@ -1,9 +1,13 @@
+torch>=2.0.0
 fastapi
-uvicorn
 streamlit
-pandas
 numpy
-scikit-learn
-torch
+pandas
+requests
+uvicorn
+pillow
+matplotlib
 plotly
+scikit-learn
+tqdm
 python-multipart

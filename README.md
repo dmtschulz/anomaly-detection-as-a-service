@@ -23,22 +23,23 @@ pip install -r requirements.txt
 python src/train.py
 ```
 
-## 🧪 Running the Backend (FastAPI)
+### 🧪 Running the Backend (FastAPI)
 
 ```
 uvicorn app.main:app --reload
 ```
 
-The Swagger API documentation will be available at http://localhost:8000/docs
-
-## 🎛️ Running the Frontend (Streamlit)
+### 🎛️ Running the Frontend (Streamlit)
 ```
 streamlit run frontend/app.py
 ```
 This launches the Streamlit UI for image upload, anomaly score visualization, and heatmap generation.
 
-### 📝 Notes
+## 📝 Notes
 - Input images must be grayscale and 28x28 pixels.
 - You can retrain the model using a different dataset by modifying src/train.py.
 
-- This is a toy project for educational/demo purposes. It is not intended for production use.-
+- This is a toy project for educational/demo purposes. It is not intended for production use.
+
+### 📚 API Docs
+Visit the interactive API docs at: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)

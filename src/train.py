@@ -1,7 +1,6 @@
 # src/train.py
 
 import os
-import copy
 import torch
 import numpy as np
 from tqdm import tqdm
@@ -10,15 +9,15 @@ from torch.utils.data import DataLoader, Subset
 from torchvision import transforms as T
 from torchvision.datasets import MNIST
 from torchvision.utils import save_image
-from sklearn.metrics import roc_auc_score
 
 import logging
+
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 # Device configuration
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-log.info("Using device:", DEVICE)
+log.info("Using device: %s", DEVICE)
 
 # Constants
 DATA_ROOT = "./data"
@@ -63,7 +62,7 @@ def train(loader, h=32, epochs=5, save_path=None):
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
     for epoch in range(epochs):
-        log.info(f"Epoch {epoch+1:>2}")
+        log.info("Epoch %d", epoch + 1)
         pbar = tqdm(loader)
         for batch, _ in pbar:
             batch = batch.to(DEVICE)
@@ -82,7 +81,8 @@ def train(loader, h=32, epochs=5, save_path=None):
 # Save model
 def save_model(model, path):
     torch.save(model.state_dict(), path)
-    log.info(f"Model saved to {path}")
+    log.info("Model saved to %s", path)
+
 
 # Load model
 def load_model(path, h=32):
@@ -90,7 +90,7 @@ def load_model(path, h=32):
     model.load_state_dict(torch.load(path, map_location=DEVICE))
     model.to(DEVICE)
     model.eval()
-    log.info(f"Model loaded from {path}")
+    log.info("Model loaded from %s", path)
     return model
 
 # Get DataLoaders

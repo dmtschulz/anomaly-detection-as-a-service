@@ -2,8 +2,6 @@
 
 import streamlit as st
 import requests
-from PIL import Image
-import io
 import base64
 
 API_URL = "http://127.0.0.1:8000/predict"
@@ -39,15 +37,13 @@ if uploaded_file:
                 heatmap_img = base64.b64decode(heatmap_b64)
 
                 # Display Original and Reconstructed side-by-side
-                col1, col2 = st.columns([1, 1])
+                col1, col2, col3 = st.columns(3)
                 with col1:
                     st.image(uploaded_file, caption="Original", width=150)
                 with col2:
                     st.image(reconstructed_img, caption="Reconstruction", width=150)
+                with col3:
+                    st.image(heatmap_img, caption="Anomaly Heatmap", width=150)
 
-                # Display Heatmap below with controlled size
-                st.markdown("---")
-                st.image(heatmap_img, caption="Anomaly Heatmap", width=300)
-
-            except requests.exceptions.RequestException as e:
-                st.error(f"API request error: {e}")
+            except requests.exceptions.JSONDecodeError:
+                st.error("Invalid response from the API. Please check backend logs.")

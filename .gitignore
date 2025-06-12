@@ -1,0 +1,5 @@
+*.pth
+*.png
+data/MNIST
+models/
+.DS_Store
